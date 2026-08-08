@@ -310,12 +310,12 @@ numerber=0;
         typinglabel_for_section.pause();
         animationLabel = new TypingLabel(section100.Sentence_Explain.get(1),fonter_2);
 //typing for illustration//
-        typinglabel_illustration=new TypingLabel("hi there how ru/nloremfjdlflffjlsfdslkfffffffdlfjdfjlfjljfsf "+"ffhllffffffffffffffffffffl;dkfdhf;ff;oiffhfsdfl\nxzbc,ccnxncxmnmn385",fonter_2);
+        typinglabel_illustration=new TypingLabel("[BLACK]hi there how ru/nloremfjdlflffjlsfdslkfffffffdlfjdfjlfjljfsf "+"ffhllffffffffffffffffffffl;dkfdhf;ff;oiffhfsdfl\nxzbc,ccnxncxmnmn385",fonter_2);
         typinglabel_illustration.setWrap(true);
         typinglabel_illustration.setFont(fonter_2);
-        typinglabel_illustration.setHeight(200);
+
         typinglabel_illustration.setWidth(Gdx.graphics.getWidth()-20f);
-        typinglabel_illustration.setPosition(20,typinglabel_for_section.getHeight()-20);
+        typinglabel_illustration.setPosition(20,-typinglabel_for_section.getY()+20);
         typinglabel_illustration.setVisible(false);
         typinglabel_illustration.pause();
         stage.addActor(typinglabel_illustration);
@@ -738,13 +738,15 @@ styliah.up=taphere_textureregion;
                   camera.position.y += typinglabel_for_section.getY()+typinglabel_for_section.getHeight()/2f;
 
                   // Applyin my current limits
-
+                          typinglabel_illustration.setY(typinglabel_for_section.getY());
+                          typinglabel_illustration.setHeight(typinglabel_for_section.getHeight());
+                          typinglabel_illustration.setText(section100.Sentence_Explain.get(2));
                   camera.update();
-                  System.out.println("y of illus and its height:: "+typinglabel_illustration.getY()+typinglabel_illustration.getHeight());
+                  System.out.println("y of illus and its height:: "+typinglabel_illustration.getY()+","+typinglabel_illustration.getHeight());
                   System.out.println("illus total overall hieght::"+(typinglabel_illustration.getY()+typinglabel_illustration.getHeight()));
                   System.out.println("image where is formed::"+p8.higurumaImages.getHeight()+p8.higurumaImages.getDepth());
                   System.out.println("camera and viewport location ::"+viewport.getWorldHeight()+viewport.getCamera());
-
+                  System.out.println("section y and height ::"+typinglabel_for_section.getY()+","+typinglabel_for_section.getHeight());
 
 
               }
@@ -766,6 +768,7 @@ APPLE+=100;
 
         typinglabel_illustration.setDebug(true);
     }
+
 
     @Override
     //REMEMEBER ONE THING NEVER CREATE A VARIABLE INSIDE SHOW CUZ THEN THAT WOULD BE LOCAL VARIABLE
