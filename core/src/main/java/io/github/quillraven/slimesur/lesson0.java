@@ -325,7 +325,7 @@ numerber=0;
         lastwordtypinglabel=new TypingLabel(p8.dialouge,fonter);
         lastwordtypinglabel.setWrap(true);
         lastwordtypinglabel.setWidth(Gdx.graphics.getWidth()-20f);
-        lastwordtypinglabel.setPosition(20,typinglabel_illustration.getY()+10);
+        lastwordtypinglabel.setPosition(20,viewport.getWorldHeight()+10);
         lastwordtypinglabel.setVisible(false);
         stage.addActor(lastwordtypinglabel);
 
@@ -738,15 +738,13 @@ styliah.up=taphere_textureregion;
                   camera.position.y += typinglabel_for_section.getY()+typinglabel_for_section.getHeight()/2f;
 
                   // Applyin my current limits
-                          typinglabel_illustration.setY(typinglabel_for_section.getY());
-                          typinglabel_illustration.setHeight(typinglabel_for_section.getHeight());
                           typinglabel_illustration.setText(section100.Sentence_Explain.get(2));
                   camera.update();
-                  System.out.println("y of illus and its height:: "+typinglabel_illustration.getY()+","+typinglabel_illustration.getHeight());
-                  System.out.println("illus total overall hieght::"+(typinglabel_illustration.getY()+typinglabel_illustration.getHeight()));
-                  System.out.println("image where is formed::"+p8.higurumaImages.getHeight()+p8.higurumaImages.getDepth());
-                  System.out.println("camera and viewport location ::"+viewport.getWorldHeight()+viewport.getCamera());
-                  System.out.println("section y and height ::"+typinglabel_for_section.getY()+","+typinglabel_for_section.getHeight());
+
+                  System.out.println("y of illus and its height:: "+typinglabel_illustration.getY() + " with height " + typinglabel_illustration.getHeight());
+                  System.out.println("illus highest point::"+(typinglabel_illustration.getY()+typinglabel_illustration.getHeight()));
+                  System.out.println("image where is formed::"+p8.higurumaImages.getWidth() + " by " + p8.higurumaImages.getHeight());
+                  System.out.println("camera and viewport location ::"+viewport.getWorldWidth() + " by " + viewport.getWorldHeight() + " with camera " +viewport.getCamera().position);
 
 
               }
@@ -871,7 +869,7 @@ if(nowapplytouch){
      batch.draw(TextureBACKGROUND,0,((-2)*viewport.getWorldHeight()),viewport.getWorldWidth(),viewport.getWorldHeight()+5000);
     if(lastdraw){
             /*batch.draw(p8.higurumaImages, -100,typinglabel_illustration.getY()-p8.higurumaImages.getHeight()-APPLE, pages[numerber].higurumaImages.getWidth() * 2, pages[numerber].higurumaImages.getHeight() * 2 + pages[numerber].extraHeight);*/
-        batch.draw(p8.higurumaImages,-100,typinglabel_illustration.getY(),599,500);
+        batch.draw(p8.higurumaImages,-100,-viewport.getWorldHeight()-500, pages[numerber].higurumaImages.getWidth() * 2, pages[numerber].higurumaImages.getHeight() * 2 + pages[numerber].extraHeight);
         //batch.draw(bBoxofdialouge,20,lastwordtypinglabel.getY(),Gdx.graphics.getWidth() - 2, Gdx.graphics.getHeight() - 100);
 
     }
