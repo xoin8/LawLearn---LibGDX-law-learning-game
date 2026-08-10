@@ -35,6 +35,7 @@ import com.github.tommyettinger.textra.TypingAdapter;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.w3c.dom.Text;
 import com.github.tommyettinger.textra.TypingLabel;
+import sun.awt.X11.XEvent;
 
 public class lesson0 implements Screen,InputProcessor {
     GdxDEMOANDROIDGame game;
@@ -55,9 +56,12 @@ public class lesson0 implements Screen,InputProcessor {
 float timers; float resolu;
     int numerber=0;boolean startthelesson=false;
 TypingLabel typingLabel,typinglabel_for_section, animationLabel,lastwordtypinglabel,typinglabel_illustration;        ; Page[] pages;
-    ImageButton tape_here_button_button,tape_here_button_button_2,ok_up_down_button,isslustrationbutton,simplfybutton,blackbutton;
+    ImageButton tape_here_button_button,tape_here_button_button_2,tape_here_button_button_3,tape_here_button_button_4,ok_up_down_button,isslustrationbutton,simplfybutton,blackbutton;
     boolean start_the_section=false;
     boolean nowstopcoming=false;
+    boolean latsthigurumaimageshouldcomenow=false;
+    boolean  changelastwords=false;
+    int onetwo=0;
 Texture higupoint =    new Texture(Gdx.files.internal("pointhigu.png"));
 Texture higubheind =    new Texture(Gdx.files.internal("behindposehigu.png"));
 Texture simplfyup,simplfydown;
@@ -166,6 +170,10 @@ public class Section{
 ArrayList<String> Sentence_Explain=new ArrayList<>();
        float extra_section_text_height,extra_section_text_width;
 }
+public class ExtraWords{
+        ArrayList<String> Words=new ArrayList<>();
+}
+
     boolean true_false_1=false;
     @Override
     public void show() {
@@ -224,7 +232,7 @@ stage.addActor(root_thetable);
  p1.dialouge="[BLACK]{WAIT=1}{EVENT=HELLO}Hello Welcome,{WAIT=1}";
  p2.dialouge="[BLACK]{SPEED=7}Welcomen to LawLear,where you can learn laws for free {WAIT=1}";
 p3.dialouge="[BLACK]{SPEED=7}{WAIT=0.1}whether you are lay man , a law student or a salaray man\n its for everyone{WAIT=1}";
-p8.dialouge="[BLACK]the best way to lern anything is to take pratice test...ye once your done reading this all examples click test button\ndont worry it will ba lot fun";
+p8.dialouge="[BLACK]the best way to lern anything is to take pratice test...ye once your done reading this all examples click test button\ndont worry it will ba lot fun{EVENT=horizon}";
 p4.dialouge="[BLACK]{SPEED=7}I'm Higuruma Hirome ,a defence attorney at the Iwata High Court Japan\n.I'll be your guide and I'll explain everything as simply as I can";
         p2.extratextheight=-30f;
         p4.extratextheight=-150f;
@@ -273,6 +281,15 @@ p4.extraHeight=100;
 
             "Note: This Section corresponds to Sec.299 of I.P.C., 1860.{ENDHIDE}");
         //
+
+        //Extra words code//
+
+        ExtraWords extrawords=new ExtraWords();
+        extrawords.Words.add("[RED]HII THERE"+p8.dialouge);
+        extrawords.Words.add("[BLACK]demo line 2");
+        extrawords.Words.add("[BLACK]catch a break or smth then when your ready click test button{EVENT=BOOM}!!!");
+
+        ///
         TextureBACKGROUND= new TextureRegion(Backgroud);
         TextureBACKGROUND2=new TextureRegion(BackgroundB);
 
@@ -324,10 +341,7 @@ numerber=0;
          //lastword//
         lastwordtypinglabel=new TypingLabel(p8.dialouge,fonter);
         lastwordtypinglabel.setWrap(true);
-        lastwordtypinglabel.setWidth(Gdx.graphics.getWidth()-20f);
-        lastwordtypinglabel.setPosition(20,viewport.getWorldHeight()+10);
-        lastwordtypinglabel.setVisible(false);
-        stage.addActor(lastwordtypinglabel);
+
 
 
 //
@@ -574,10 +588,33 @@ typinglabel_illustration.setTypingListener(new TypingAdapter(){
         simplfybutton.setTouchable(Touchable.enabled);
         System.out.println("button f simply is::"+simplfybutton.isVisible());
         lastwordtypinglabel.setVisible(false);;
-        lastwordtypinglabel.restart();
+
         lastwordtypinglabel.setTouchable(Touchable.disabled);
+        tape_here_button_button_3.setVisible(true);
+        tape_here_button_button_3.setTouchable(Touchable.enabled);
+        System.out.println("insideillustartion we did tap3 button true is it::"+tape_here_button_button_3.isVisible());
+
     }
 });
+
+lastwordtypinglabel.setTypingListener(new TypingAdapter(){
+    public void event(String event) {
+          if(event.equals("horizon")){
+              changelastwords=true;
+          }
+          if(event.equals("BOOM")){
+
+              System.out.println("the last line tap butooon enabled inside BOOM");
+          }
+    }
+    public void end(){
+        tape_here_button_button_4.setVisible(true);
+        tape_here_button_button_4.setTouchable(Touchable.enabled);
+        System.out.println("inside end method of lastword tap should be enable  check it::"+tape_here_button_button_4.isVisible());
+        System.out.println("leavng lastword method onetwo as::"+onetwo);
+    }
+});
+
 
         Texture tap_here_button=new Texture("taphere.png");
         TextureRegionDrawable taphere_textureregion=new TextureRegionDrawable(new TextureRegion(tap_here_button));
@@ -595,9 +632,36 @@ styliah.up=taphere_textureregion;
 
         stage.addActor(tape_here_button_button_2);
 
+ tape_here_button_button_3 = new ImageButton(styliah);
+        tape_here_button_button_3.setSize(100f,100f);
+        tape_here_button_button_3.setPosition(100,-viewport.getWorldHeight()+20);
+
+
+stage.addActor(tape_here_button_button_3);
         tape_here_button_button_2.setVisible(false);
         tape_here_button_button_2.setTouchable(Touchable.disabled);
+/// 4.////
 
+        tape_here_button_button_4 = new ImageButton(styliah);
+        tape_here_button_button_4.setSize(100f,100f);
+        tape_here_button_button_4.setPosition(100,-viewport.getWorldHeight()+20);
+
+
+        stage.addActor(tape_here_button_button_4);
+        tape_here_button_button_4.setVisible(false);
+        tape_here_button_button_4.setTouchable(Touchable.disabled);
+
+
+        ///
+
+
+        tape_here_button_button_3.setVisible(false);
+        tape_here_button_button_3.setTouchable(Touchable.disabled);
+        lastwordtypinglabel.setWidth(Gdx.graphics.getWidth()-20f);
+        lastwordtypinglabel.setPosition(1,tape_here_button_button_3.getY()-500);
+        lastwordtypinglabel.setVisible(false);
+        stage.addActor(lastwordtypinglabel);
+        lastwordtypinglabel.pause();
         generator.dispose();
 
         stage.addActor(typingLabel);
@@ -722,6 +786,75 @@ styliah.up=taphere_textureregion;
 
             }
         });
+lastwordtypinglabel.setVisible(false);
+lastwordtypinglabel.pause();
+
+        tape_here_button_button_3.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+
+                if(lastwordtypinglabel.isPaused()){
+                    latsthigurumaimageshouldcomenow=true;
+                    lastwordtypinglabel.setVisible(true);
+                    lastwordtypinglabel.setTouchable(Touchable.enabled);
+                    lastwordtypinglabel.restart();
+                }
+
+                tape_here_button_button_3.setTouchable(Touchable.disabled);
+                tape_here_button_button_3.setVisible(false);
+                System.out.println("main line ran tap idsabled");
+                System.out.println("existing tap method with lastwordtypinglabel' text set to;-"+lastwordtypinglabel);
+                System.out.println("existing tap method with tap is enabled??:::"+tape_here_button_button_3.isVisible());
+            }
+        });
+
+
+        tape_here_button_button_4.addListener(new ClickListener(){
+           public void clicked(InputEvent event, float x, float y) {
+               System.out.println("inside 4 button now text should be changed-");
+               if(onetwo<3){
+                   System.out.println("onetwo was ::"+onetwo+"we ince it too::");
+                   onetwo++;
+                   System.out.println(onetwo);
+                   tape_here_button_button_4.setTouchable(Touchable.disabled);
+                   tape_here_button_button_4.setVisible(false);
+                   System.out.println("now 4 should be invisiblle"+tape_here_button_button_4.isVisible());
+
+                   if(onetwo>=3){
+                       System.out.println("\nit got bigger than 3 inside onetwo only so\n we r ofing everything here\n");
+                       System.out.println("this thing is not n else but in inner  IN part");
+                       System.out.println("else part cuz onetwo was :"+onetwo);
+                       System.out.println("we r shutting everything off now check");
+                       tape_here_button_button_4.setTouchable(Touchable.enabled);
+                       tape_here_button_button_4.setVisible(false);
+                       System.out.println("tap4:"+tape_here_button_button_4.isVisible());
+                       latsthigurumaimageshouldcomenow=false;
+                       System.out.println("box and image:"+latsthigurumaimageshouldcomenow);
+                       lastwordtypinglabel.pause();
+                       lastwordtypinglabel.setVisible(false);
+                       System.out.println("lastwords is visible::"+lastwordtypinglabel.isVisible());
+                   }else if(onetwo<3){
+                       System.out.println("new text will be this "+lastwordtypinglabel);
+                              lastwordtypinglabel.setText(extrawords.Words.get(onetwo));
+                              lastwordtypinglabel.restart();
+                   }
+               }else{
+                   System.out.println("else part cuz onetwo was :"+onetwo);
+                   System.out.println("we r shutting everything off now check");
+                   tape_here_button_button_4.setTouchable(Touchable.enabled);
+                   tape_here_button_button_4.setVisible(false);
+                   System.out.println("tap4:"+tape_here_button_button_4.isVisible());
+                   latsthigurumaimageshouldcomenow=false;
+                   System.out.println("box and image:"+latsthigurumaimageshouldcomenow);
+                   lastwordtypinglabel.pause();
+                   lastwordtypinglabel.setVisible(false);
+                   System.out.println("lastwords is visible::"+lastwordtypinglabel.isVisible());
+               }
+           }
+        });
+
+
+
+
         isslustrationbutton.addListener(new ClickListener(){
               public void clicked(InputEvent event, float x, float y) {
                   illustrations=true;
@@ -740,7 +873,8 @@ styliah.up=taphere_textureregion;
                   // Applyin my current limits
                           typinglabel_illustration.setText(section100.Sentence_Explain.get(2));
                   camera.update();
-
+                     tape_here_button_button_3.setVisible(true);
+                     tape_here_button_button_3.setTouchable(Touchable.enabled);
                   System.out.println("y of illus and its height:: "+typinglabel_illustration.getY() + " with height " + typinglabel_illustration.getHeight());
                   System.out.println("illus highest point::"+(typinglabel_illustration.getY()+typinglabel_illustration.getHeight()));
                   System.out.println("image where is formed::"+p8.higurumaImages.getWidth() + " by " + p8.higurumaImages.getHeight());
@@ -869,8 +1003,11 @@ if(nowapplytouch){
      batch.draw(TextureBACKGROUND,0,((-2)*viewport.getWorldHeight()),viewport.getWorldWidth(),viewport.getWorldHeight()+5000);
     if(lastdraw){
             /*batch.draw(p8.higurumaImages, -100,typinglabel_illustration.getY()-p8.higurumaImages.getHeight()-APPLE, pages[numerber].higurumaImages.getWidth() * 2, pages[numerber].higurumaImages.getHeight() * 2 + pages[numerber].extraHeight);*/
-        batch.draw(p8.higurumaImages,-100,-viewport.getWorldHeight()-500, pages[numerber].higurumaImages.getWidth() * 2, pages[numerber].higurumaImages.getHeight() * 2 + pages[numerber].extraHeight);
-        //batch.draw(bBoxofdialouge,20,lastwordtypinglabel.getY(),Gdx.graphics.getWidth() - 2, Gdx.graphics.getHeight() - 100);
+if(latsthigurumaimageshouldcomenow){
+    batch.draw(p8.higurumaImages,-100,-viewport.getWorldHeight()-800, pages[numerber].higurumaImages.getWidth() * 2, pages[numerber].higurumaImages.getHeight() * 2 + pages[numerber].extraHeight);
+    batch.draw(bBoxofdialouge,1,-viewport.getWorldHeight()-800,Gdx.graphics.getWidth() - 2, Gdx.graphics.getHeight() - 100);
+
+}
 
     }
 
@@ -923,8 +1060,7 @@ OLD TOUCH
 */
     if (Gdx.input.isTouched()) {
         float currentY = Gdx.input.getY();
-        System.out.println("current Y::"+currentY);
-        System.out.println("height and Y of typingscetion ::;"+typinglabel_for_section.getHeight()+","+typinglabel_for_section.getY());
+
 
         if (lastTouchY == 0) {
             lastTouchY = currentY;
