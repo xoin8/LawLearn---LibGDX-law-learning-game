@@ -56,7 +56,7 @@ public class transition implements Screen {
                 Gdx.graphics.getHeight()/2f);
 batch.end();
 if(timer>3){
-    game.setScreen(new lesson0(game));
+    game.setScreen(new QuizeTest(game));
 }
     }
 
