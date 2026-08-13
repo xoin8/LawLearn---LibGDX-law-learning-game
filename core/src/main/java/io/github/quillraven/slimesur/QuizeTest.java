@@ -2,8 +2,7 @@ package io.github.quillraven.slimesur;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import java.util.Arrays;
@@ -13,20 +12,20 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.utils.*;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ScreenUtils;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -116,8 +115,8 @@ class QuizeTest implements Screen,InputProcessor {
         int  Extra_width_for_text;
         int padding_1;
         int padding_2;
-        String[] options= {OptionA, OptionB, OptionC, OptionD};
 
+        String[] options;
         public Q_A(String question,
                    String  answer,
                    String optiona,
@@ -136,6 +135,7 @@ class QuizeTest implements Screen,InputProcessor {
             scroll=scrooll;
             Extra_height_for_text=extra_height_for_text;
             Extra_width_for_text=extra_width_for_text;
+       options  = new String[]{OptionA, OptionB, OptionC, OptionD};
 
         }
     }
@@ -149,9 +149,15 @@ Q_A [] questions={
     Skin skin =new Skin();
     //textures here//
     Texture Bigbox=new  Texture(Gdx.files.internal("smalllabel.png"));
+    Texture bluebuton=new Texture(Gdx.files.internal("blue button.png"));
+    NinePatch bluebutton9 = new NinePatch(
+        new Texture(Gdx.files.internal("blue button.png")),
+        20, 20, 20, 20
+    );
+int a;
     Texture Bigboxdown=new  Texture(Gdx.files.internal("smalllabeldown.png"));
     Texture Background_which_is_white=new  Texture(Gdx.files.internal("whitebackground.png"));
-    Texture Background_which_is_white2=new  Texture(Gdx.files.internal("whitebackground.png"));
+    Texture Background_which_is_white2=new  Texture(Gdx.files.internal("pinkbackground.png"));
     Texture Background_which_is_white3=new  Texture(Gdx.files.internal("whitebackground.png"));
 
     /// ends//
@@ -179,26 +185,20 @@ int worldheight,worldwidth;
     FreeTypeFontGenerator.FreeTypeFontParameter parameter =
         new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-    parameter.size = 32;
+    parameter.size = 109;
 
     BitmapFont font = generator.generateFont(parameter);
 
     generator.dispose();
 Font TextraFonterthe_goobie_theGOOBER=new Font(font);
     skin.add("default-font", font);
+    font.getRegion().getTexture().setFilter(
+        Texture.TextureFilter.Linear,
+        Texture.TextureFilter.Linear
+    );
     //ends//
 //skin buttons//
-    //this was our previous code//
-    /*skin.add("buttonup",new  TextureRegionDrawable(new TextureRegion(Bigbox)));
-      skin.add("buttondown",new TextureRegionDrawable(new TextureRegion(Bigboxdown)));
-   Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
-   buttonStyle.up=skin.getDrawable("buttonup");
-   buttonStyle.down=skin.getDrawable("buttondown");
-   skin.add("buttonSTLYE",buttonStyle);
-   skin.add("default", buttonStyle,TextButton.TextButtonStyle.class);*/
 
-    //Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
-//TextButton.TextButtonStyle buttonStyle=new TextButton.TextButtonStyle();
     Styles.TextButtonStyle buttonStyle = new Styles.TextButtonStyle();
     buttonStyle.up = new TextureRegionDrawable(
         new TextureRegion(Bigbox)
@@ -207,8 +207,18 @@ Font TextraFonterthe_goobie_theGOOBER=new Font(font);
     buttonStyle.down = new TextureRegionDrawable(
         new TextureRegion(Bigboxdown)
     );
+    Styles.TextButtonStyle bluebuttonStyle = new Styles.TextButtonStyle();
+    bluebuttonStyle.up = new TextureRegionDrawable(
+        new TextureRegion(bluebuton)
+    );
+
+    bluebuttonStyle.down = new TextureRegionDrawable(
+        new TextureRegion(bluebuton)
+    );
 
     skin.add("default", buttonStyle);
+    skin.add("bluer",bluebuttonStyle);
+    bluebuttonStyle.font=TextraFonterthe_goobie_theGOOBER;
 buttonStyle.font=TextraFonterthe_goobie_theGOOBER;
     TextraButton OptionA_button =
         new TextraButton(questions[0].options[0], skin);
@@ -218,12 +228,46 @@ buttonStyle.font=TextraFonterthe_goobie_theGOOBER;
         new TextraButton(questions[0].options[2], skin);
     TextraButton OptionD_button =
         new TextraButton(questions[0].options[3], skin);
-    TextraButton[] optins_buttons = {
+    TextraButton[] mybasketof_option__buttons = {
 
         OptionA_button,OptionB_button,OptionC_button,OptionD_button,
     };
-    Collections.shuffle(Arrays.asList(optins_buttons));
+    for (TextraButton button : mybasketof_option__buttons) {
+        button.setText("[BLACK]"+button.getText());
+    }
+    Collections.shuffle(Arrays.asList(mybasketof_option__buttons));
 
+    System.out.println("BEFORE:");
+
+    for (TextraButton button : mybasketof_option__buttons) {
+        System.out.println(button.getText());
+    }
+
+    Collections.shuffle(Arrays.asList(mybasketof_option__buttons));
+
+    System.out.println("AFTER:");
+
+    for (TextraButton button : mybasketof_option__buttons) {
+        System.out.println(button.getText());
+    }
+TextraButton bb=new TextraButton("Frustration", skin,"bluer");
+
+    NinePatchDrawable ninedraw = new NinePatchDrawable(bluebutton9);
+
+    skin.add("answer", ninedraw);
+    TextButton.TextButtonStyle style =
+        new TextButton.TextButtonStyle();
+
+    style.up=ninedraw;
+    style.down=ninedraw;
+    style.font=font;
+    skin.add("answerStyle", style);
+
+    skin.add("answerStyle", style);
+    TextButton button9 =
+        new TextButton("Frustration", skin, "answerStyle");
+
+    //ends//
     //bacth stuff//
 batch=new SpriteBatch();
 
@@ -241,16 +285,18 @@ worldheight=1280;worldwidth=720;
     table = new Table();
     table.setFillParent(true);
 
-for(TextraButton b:optins_buttons){
-    table.add(b).width(500).height(500).pad(500);
+for(TextraButton b:mybasketof_option__buttons){
+    table.add(b).width(worldwidth).height(200).pad(12);
     table.row();
 }
+    table.add(button9);
+table.row();
+table.add(bb);
 Gdx.input.setInputProcessor(stage);
     stage.addActor(table);
 
-    /// ends///
-
-
+    /// ends//
+     a=1;
     }
 
 
@@ -261,7 +307,17 @@ viewport.apply();
 batch.setProjectionMatrix(camera.combined);
 batch.begin();
 batch.draw(Background_which_is_white,0,0,worldwidth,worldheight);
+batch.draw(Background_which_is_white2,0,worldheight,worldwidth,worldheight);
 
+
+
+//in scase to print smth
+        while(a>0){
+            System.out.println(Background_which_is_white.getHeight()+","+Background_which_is_white.getDepth());
+            System.out.println("pink::"+Background_which_is_white2.getHeight());
+            a--;
+        }
+        //
 batch.end();
 stage.act(delta);
 stage.draw();
