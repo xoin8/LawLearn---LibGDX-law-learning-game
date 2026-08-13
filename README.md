@@ -33,3 +33,8 @@ Useful Gradle tasks and flags:
 
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
+
+
+[![GitHub stats](https://github-readme-stats-one-bice.vercel.app/api?username=YOUR_USERNAME&show_icons=true&include_all_commits=true&count_private=true&role=OWNER,COLLABORATOR)](https://github.com/YOUR_USERNAME/)
+
+![GitHub Streak](https://github-readme-streak-stats-ten-ruddy.vercel.app?user=YOUR_USERNAME&hide_border=true)
