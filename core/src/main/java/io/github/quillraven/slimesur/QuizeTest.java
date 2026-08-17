@@ -48,6 +48,12 @@ import com.github.tommyettinger.textra.Font;
 import com.badlogic.gdx.Screen;
 //
 
+
+/*
+git status
+git add .
+git commit -m "whatever I changed"
+git push*/
 class QuizeTest implements Screen,InputProcessor {
 
     GdxDEMOANDROIDGame game;
@@ -149,11 +155,19 @@ Q_A [] questions={
     Skin skin =new Skin();
     //textures here//
     Texture Bigbox=new  Texture(Gdx.files.internal("smalllabel.png"));
-    Texture bluebuton=new Texture(Gdx.files.internal("blue button.png"));
+
     NinePatch bluebutton9 = new NinePatch(
         new Texture(Gdx.files.internal("blue button.png")),
         20, 20, 20, 20
     );
+    NinePatch boxup=new NinePatch(new Texture(Gdx.files.internal("smalllabel.png")));
+    NinePatch boxdown=new NinePatch(new Texture(Gdx.files.internal("smalllabeldown.png")));
+    NinePatchDrawable NineBoxdrawup = new NinePatchDrawable(boxup);
+    NinePatchDrawable NineBoxdrawdown = new NinePatchDrawable(boxdown);
+
+
+
+
 int a;
     Texture Bigboxdown=new  Texture(Gdx.files.internal("smalllabeldown.png"));
     Texture Background_which_is_white=new  Texture(Gdx.files.internal("whitebackground.png"));
@@ -199,41 +213,34 @@ Font TextraFonterthe_goobie_theGOOBER=new Font(font);
     //ends//
 //skin buttons//
 
-    Styles.TextButtonStyle buttonStyle = new Styles.TextButtonStyle();
-    buttonStyle.up = new TextureRegionDrawable(
-        new TextureRegion(Bigbox)
-    );
+    skin.add("default_by_Nine", NineBoxdrawup);
+    skin.add("default_by_Nine",NineBoxdrawdown);
+    Styles.TextButtonStyle default_by_styleOf_NINE =
+        new Styles.TextButtonStyle();
 
-    buttonStyle.down = new TextureRegionDrawable(
-        new TextureRegion(Bigboxdown)
-    );
-    Styles.TextButtonStyle bluebuttonStyle = new Styles.TextButtonStyle();
-    bluebuttonStyle.up = new TextureRegionDrawable(
-        new TextureRegion(bluebuton)
-    );
+    default_by_styleOf_NINE.up=NineBoxdrawup;
+    default_by_styleOf_NINE.down=NineBoxdrawdown;
+    font.setColor(Color.BLACK);
+    default_by_styleOf_NINE.font=TextraFonterthe_goobie_theGOOBER;
+    skin.add("default_by_NINE_BOX_Style", default_by_styleOf_NINE);
 
-    bluebuttonStyle.down = new TextureRegionDrawable(
-        new TextureRegion(bluebuton)
-    );
 
-    skin.add("default", buttonStyle);
-    skin.add("bluer",bluebuttonStyle);
-    bluebuttonStyle.font=TextraFonterthe_goobie_theGOOBER;
-buttonStyle.font=TextraFonterthe_goobie_theGOOBER;
+
     TextraButton OptionA_button =
-        new TextraButton(questions[0].options[0], skin);
+        new TextraButton(questions[0].options[0], skin,"default_by_NINE_BOX_Style");
     TextraButton OptionB_button =
-        new TextraButton(questions[0].options[1], skin);
+        new TextraButton(questions[0].options[1], skin,"default_by_NINE_BOX_Style");
     TextraButton OptionC_button =
-        new TextraButton(questions[0].options[2], skin);
+        new TextraButton(questions[0].options[2], skin,"default_by_NINE_BOX_Style");
     TextraButton OptionD_button =
-        new TextraButton(questions[0].options[3], skin);
+        new TextraButton(questions[0].options[3], skin,"default_by_NINE_BOX_Style");
     TextraButton[] mybasketof_option__buttons = {
 
         OptionA_button,OptionB_button,OptionC_button,OptionD_button,
     };
     for (TextraButton button : mybasketof_option__buttons) {
-        button.setText("[BLACK]"+button.getText());
+             button.setText("[BLACK]"+button.getText());
+
     }
     Collections.shuffle(Arrays.asList(mybasketof_option__buttons));
 
@@ -250,22 +257,7 @@ buttonStyle.font=TextraFonterthe_goobie_theGOOBER;
     for (TextraButton button : mybasketof_option__buttons) {
         System.out.println(button.getText());
     }
-TextraButton bb=new TextraButton("Frustration", skin,"bluer");
 
-    NinePatchDrawable ninedraw = new NinePatchDrawable(bluebutton9);
-
-    skin.add("answer", ninedraw);
-    TextButton.TextButtonStyle style =
-        new TextButton.TextButtonStyle();
-
-    style.up=ninedraw;
-    style.down=ninedraw;
-    style.font=font;
-    skin.add("answerStyle", style);
-
-    skin.add("answerStyle", style);
-    TextButton button9 =
-        new TextButton("Frustration", skin, "answerStyle");
 
     //ends//
     //bacth stuff//
@@ -289,10 +281,9 @@ for(TextraButton b:mybasketof_option__buttons){
     table.add(b).width(worldwidth).height(200).pad(12);
     table.row();
 }
-    table.add(button9);
-table.row();
-table.add(bb);
-Gdx.input.setInputProcessor(stage);
+
+
+ Gdx.input.setInputProcessor(stage);
     stage.addActor(table);
 
     /// ends//
