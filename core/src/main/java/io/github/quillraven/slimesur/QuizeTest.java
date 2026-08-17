@@ -53,7 +53,8 @@ import com.badlogic.gdx.Screen;
 git status
 git add .
 git commit -m "whatever I changed"
-git push*/
+git push
+./gradlew android:installDebug*/
 class QuizeTest implements Screen,InputProcessor {
 
     GdxDEMOANDROIDGame game;
@@ -149,7 +150,7 @@ Q_A [] questions={
     new Q_A("Which section of the Bhartiya Nyaya Sanhita defines the offence of culpable homicide?",
 
         "Section 100","Section 99", "Section 101","Section 100","Section 102",
-        false,100,100)
+        false,900,100)
     };
 
     Skin skin =new Skin();
@@ -162,8 +163,12 @@ Q_A [] questions={
     );
     NinePatch boxup=new NinePatch(new Texture(Gdx.files.internal("smalllabel.png")));
     NinePatch boxdown=new NinePatch(new Texture(Gdx.files.internal("smalllabeldown.png")));
+
+    NinePatch Question=new NinePatch(new Texture(Gdx.files.internal("biglabel.png")));
+
     NinePatchDrawable NineBoxdrawup = new NinePatchDrawable(boxup);
     NinePatchDrawable NineBoxdrawdown = new NinePatchDrawable(boxdown);
+    NinePatchDrawable UestionUp_Down = new NinePatchDrawable(Question);
 
 
 
@@ -210,9 +215,27 @@ Font TextraFonterthe_goobie_theGOOBER=new Font(font);
         Texture.TextureFilter.Linear,
         Texture.TextureFilter.Linear
     );
+    FreeTypeFontGenerator ggenerator =
+        new FreeTypeFontGenerator(
+            Gdx.files.internal("RobotoSlab-Regular.ttf")
+        );
+
+    FreeTypeFontGenerator.FreeTypeFontParameter pparameter =
+        new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+    pparameter.size = 40;
+
+    BitmapFont secondFont = ggenerator.generateFont(pparameter);
+    ggenerator.dispose();
+    Font thequestionfont=new Font(secondFont);
+    skin.add("small-font", secondFont);
+    secondFont.getRegion().getTexture().setFilter(
+        Texture.TextureFilter.Linear,
+        Texture.TextureFilter.Linear
+    );
+
     //ends//
 //skin buttons//
-
     skin.add("default_by_Nine", NineBoxdrawup);
     skin.add("default_by_Nine",NineBoxdrawdown);
     Styles.TextButtonStyle default_by_styleOf_NINE =
@@ -223,8 +246,6 @@ Font TextraFonterthe_goobie_theGOOBER=new Font(font);
     font.setColor(Color.BLACK);
     default_by_styleOf_NINE.font=TextraFonterthe_goobie_theGOOBER;
     skin.add("default_by_NINE_BOX_Style", default_by_styleOf_NINE);
-
-
 
     TextraButton OptionA_button =
         new TextraButton(questions[0].options[0], skin,"default_by_NINE_BOX_Style");
@@ -257,6 +278,17 @@ Font TextraFonterthe_goobie_theGOOBER=new Font(font);
     for (TextraButton button : mybasketof_option__buttons) {
         System.out.println(button.getText());
     }
+//Qustion//
+
+
+    Styles.TextButtonStyle questionstyle = new Styles.TextButtonStyle();
+    questionstyle.up=UestionUp_Down;
+    questionstyle.down=UestionUp_Down;
+    questionstyle.font=thequestionfont;
+    questionstyle.fontColor=Color.BLACK;
+    skin.add("Question_skin",questionstyle);
+    TextraButton question=new TextraButton(questions[0].Question,skin,"Question_skin");
+
 
 
     //ends//
@@ -276,12 +308,18 @@ worldheight=1280;worldwidth=720;
     stage=new Stage(viewport,batch);
     table = new Table();
     table.setFillParent(true);
+    float questionWidth = viewport.getWorldWidth() - 30;
+    question.getTextraLabel().setWrap(true);
+    question.getTextraLabel();
 
+    table.add(question).height(1000).width(questionWidth);
+
+    table.row();
+    table.row();
 for(TextraButton b:mybasketof_option__buttons){
     table.add(b).width(worldwidth).height(200).pad(12);
     table.row();
 }
-
 
  Gdx.input.setInputProcessor(stage);
     stage.addActor(table);
