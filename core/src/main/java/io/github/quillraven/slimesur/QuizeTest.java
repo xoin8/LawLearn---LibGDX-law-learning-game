@@ -118,10 +118,18 @@ class QuizeTest implements Screen,InputProcessor {
         int largest_height_of_option;
         int largest_width_of_option;
         boolean scroll;
-        int Extra_height_for_text;
-        int  Extra_width_for_text;
-        int padding_1;
-        int padding_2;
+        float Extra_height_for_text;
+        float  Extra_width_for_text;
+        float padding_1;
+        float padding_2;
+        //its either viewportheight or camera height or  constant
+        float Question_position;
+
+
+        //tells how much big a question box willl be;
+        float Question_drawn_size_height;
+        float Question_drawn_size_width,Question_drawn_size_padbottom;
+
 
         String[] options;
         public Q_A(String question,
@@ -130,9 +138,7 @@ class QuizeTest implements Screen,InputProcessor {
                    String optionb,
                    String optionc,
                    String optiond,
-                   boolean scrooll,
-                   int extra_height_for_text,
-                   int extra_width_for_text){
+                   boolean scrooll){
             Question=question;
             Answer=answer;
             OptionA=optiona;
@@ -140,18 +146,12 @@ class QuizeTest implements Screen,InputProcessor {
             OptionC=optionc;
             OptionD=optiond;
             scroll=scrooll;
-            Extra_height_for_text=extra_height_for_text;
-            Extra_width_for_text=extra_width_for_text;
+
        options  = new String[]{OptionA, OptionB, OptionC, OptionD};
 
         }
     }
-Q_A [] questions={
-    new Q_A("Which section of the Bhartiya Nyaya Sanhita defines the offence of culpable homicide?",
 
-        "Section 100","Section 99", "Section 101","Section 100","Section 102",
-        false,900,100)
-    };
 
     Skin skin =new Skin();
     //textures here//
@@ -164,7 +164,7 @@ Q_A [] questions={
     NinePatch boxup=new NinePatch(new Texture(Gdx.files.internal("smalllabel.png")));
     NinePatch boxdown=new NinePatch(new Texture(Gdx.files.internal("smalllabeldown.png")));
 
-    NinePatch Question=new NinePatch(new Texture(Gdx.files.internal("biglabel.png")));
+    NinePatch Question=new NinePatch(new Texture(Gdx.files.internal("er.png")));
 
     NinePatchDrawable NineBoxdrawup = new NinePatchDrawable(boxup);
     NinePatchDrawable NineBoxdrawdown = new NinePatchDrawable(boxdown);
@@ -191,6 +191,15 @@ int worldheight,worldwidth;
 
 
     ///ende///
+
+    //QUESTIONS''//
+    Q_A [] questions={
+        new Q_A("Which section of the rhyaBatr Nyaya ahinSta fineeds the fofecen fo acuplble omiichde?",
+
+            "Section 100","Section 99", "Section 101","Section 100","Section 102",
+            false)
+    };
+    //ends///
 @Override
     public void show() {
 
@@ -204,7 +213,7 @@ int worldheight,worldwidth;
     FreeTypeFontGenerator.FreeTypeFontParameter parameter =
         new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-    parameter.size = 109;
+    parameter.size = 45;
 
     BitmapFont font = generator.generateFont(parameter);
 
@@ -223,7 +232,7 @@ Font TextraFonterthe_goobie_theGOOBER=new Font(font);
     FreeTypeFontGenerator.FreeTypeFontParameter pparameter =
         new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-    pparameter.size = 40;
+    pparameter.size = 50;
 
     BitmapFont secondFont = ggenerator.generateFont(pparameter);
     ggenerator.dispose();
@@ -301,23 +310,46 @@ batch=new SpriteBatch();
 worldheight=1280;worldwidth=720;
     camera=new OrthographicCamera();
     viewport=new ExtendViewport(worldwidth,worldheight,camera);
-
-    //ends//
 //stage here//
 
     stage=new Stage(viewport,batch);
     table = new Table();
     table.setFillParent(true);
-    float questionWidth = viewport.getWorldWidth() - 30;
+
     question.getTextraLabel().setWrap(true);
     question.getTextraLabel();
 
-    table.add(question).height(1000).width(questionWidth);
 
+//  |||||CHNAGE  larget_width_for_text Question_drawn_size_width Question_position |||||||
+    questions[0].Question_drawn_size_width=viewport.getWorldWidth()-30;
+    questions[0].Question_position= 100;
+    questions[0].Question_drawn_size_padbottom=100;
+    questions[0].padding_1=12;
+    questions[0].largest_height_of_option=90;
+    questions[0].largest_width_of_option=worldwidth;
+    questions[0].Question_drawn_size_height=600;
+    table.add(question).height(questions[0].Question_drawn_size_height)
+        .width(questions[0].Question_drawn_size_width)
+        .padBottom(questions[0].Question_drawn_size_padbottom).padTop(-30);
+    question.setPosition(0, questions[0].Question_position);
+    System.out.println("table y :"+table.getY());
+    table.setY(table.getY()+60);
+    System.out.println("table y :"+table.getY());
+
+    //ends//
+    System.out.println("table height ::"+table.getHeight());
     table.row();
     table.row();
+    System.out.println("text witdh ::"+questions[0].largest_height_of_option);
+    System.out.println("text height ::"+questions[0].largest_height_of_option);
+    System.out.println("text padd::"+questions[0].padding_1);
+    System.out.println("Q witdh ::"+questions[0].Question_drawn_size_width);
+    System.out.println("Q height ::"+questions[0].Question_drawn_size_height);
+    System.out.println("Q padd ::"+questions[0].Question_drawn_size_padbottom);
+    System.out.println("Q position  ::"+questions[0].Question_position);
 for(TextraButton b:mybasketof_option__buttons){
-    table.add(b).width(worldwidth).height(200).pad(12);
+    table.add(b).width(questions[0].largest_width_of_option).height(questions[0].largest_height_of_option)
+        .pad(questions[0].padding_1);
     table.row();
 }
 
