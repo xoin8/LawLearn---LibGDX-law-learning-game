@@ -165,19 +165,36 @@ class QuizeTest implements Screen,InputProcessor {
     NinePatch boxdown=new NinePatch(new Texture(Gdx.files.internal("smalllabeldown.png")));
 
     NinePatch Question=new NinePatch(new Texture(Gdx.files.internal("er.png")));
+    NinePatch greenpng=new NinePatch(new Texture(Gdx.files.internal("greenbutton.png")));
+    NinePatch greenpnng=new NinePatch(new Texture(Gdx.files.internal("greenbuttondown.png")));
+
+    NinePatch RRgreenpng=new NinePatch(new Texture(Gdx.files.internal("redbutton.png")));
+    NinePatch RRgreenpnng=new NinePatch(new Texture(Gdx.files.internal("redbuttondown.png")));
 
     NinePatchDrawable NineBoxdrawup = new NinePatchDrawable(boxup);
     NinePatchDrawable NineBoxdrawdown = new NinePatchDrawable(boxdown);
     NinePatchDrawable UestionUp_Down = new NinePatchDrawable(Question);
+  //correct and wrong
+    NinePatchDrawable gaga=new NinePatchDrawable(greenpng);
+    NinePatchDrawable gagadada=new NinePatchDrawable(greenpnng);
+    NinePatchDrawable RRgaga=new NinePatchDrawable(RRgreenpng);
+    NinePatchDrawable RRgagadada=new NinePatchDrawable(RRgreenpnng);
 
 
 
-
-int a;
+//int stuff and float stuff and boolean down too here
+int a;float bottomoftheyopacktopackbuttony;
+boolean do_it_hooraya=false;
+int answer_3_or_5;
+///ends//
     Texture Bigboxdown=new  Texture(Gdx.files.internal("smalllabeldown.png"));
     Texture Background_which_is_white=new  Texture(Gdx.files.internal("whitebackground.png"));
     Texture Background_which_is_white2=new  Texture(Gdx.files.internal("pinkbackground.png"));
     Texture Background_which_is_white3=new  Texture(Gdx.files.internal("whitebackground.png"));
+
+    Texture correctbackground=new Texture(Gdx.files.internal("correctbg.png"));
+    Texture wrongbackground=new Texture(Gdx.files.internal("wrongbg.png"));
+
 
     /// ends//
 int worldheight,worldwidth;
@@ -205,6 +222,7 @@ int worldheight,worldwidth;
 
 
 //font//
+
     FreeTypeFontGenerator generator =
         new FreeTypeFontGenerator(
             Gdx.files.internal("RobotoSlab-Regular.ttf")
@@ -236,9 +254,27 @@ Font TextraFonterthe_goobie_theGOOBER=new Font(font);
 
     BitmapFont secondFont = ggenerator.generateFont(pparameter);
     ggenerator.dispose();
+
+
     Font thequestionfont=new Font(secondFont);
     skin.add("small-font", secondFont);
     secondFont.getRegion().getTexture().setFilter(
+        Texture.TextureFilter.Linear,
+        Texture.TextureFilter.Linear
+    );
+
+
+
+    FreeTypeFontGenerator pgenrot=new FreeTypeFontGenerator(Gdx.files.internal("Pfont.ttf"));
+    FreeTypeFontGenerator.FreeTypeFontParameter pupppy=new FreeTypeFontGenerator.FreeTypeFontParameter();
+    pupppy.size=45;
+    BitmapFont fonty=pgenrot.generateFont(pupppy);
+
+    pgenrot.dispose();
+    Font thepixyfont=new Font(fonty)     ;
+
+    skin.add("pixel-font", fonty);
+    fonty.getRegion().getTexture().setFilter(
         Texture.TextureFilter.Linear,
         Texture.TextureFilter.Linear
     );
@@ -287,6 +323,12 @@ Font TextraFonterthe_goobie_theGOOBER=new Font(font);
     for (TextraButton button : mybasketof_option__buttons) {
         System.out.println(button.getText());
     }
+    /// THIER INPUT//
+
+
+
+
+
 //Qustion//
 
 
@@ -297,6 +339,19 @@ Font TextraFonterthe_goobie_theGOOBER=new Font(font);
     questionstyle.fontColor=Color.BLACK;
     skin.add("Question_skin",questionstyle);
     TextraButton question=new TextraButton(questions[0].Question,skin,"Question_skin");
+   //correct and wonrg
+    Styles.TextButtonStyle Cstye=new Styles.TextButtonStyle();
+    Cstye.up=gaga;
+    Cstye.down=gagadada;
+    Cstye.font=thepixyfont;
+    skin.add("correct-skin",Cstye);
+            TextraButton greenbutton=new TextraButton("[WHITE]NEXT",skin,"correct-skin");;
+    Styles.TextButtonStyle Rstye=new Styles.TextButtonStyle();
+    Rstye.up=gaga;
+    Rstye.down=gagadada;
+    Rstye.font=thepixyfont;
+    skin.add("wrong-skin",Rstye);
+    TextraButton redbutton=new TextraButton("[WHITE]NEXT",skin,"wrong-skin");;
 
 
 
@@ -347,18 +402,219 @@ worldheight=1280;worldwidth=720;
     System.out.println("Q height ::"+questions[0].Question_drawn_size_height);
     System.out.println("Q padd ::"+questions[0].Question_drawn_size_padbottom);
     System.out.println("Q position  ::"+questions[0].Question_position);
-for(TextraButton b:mybasketof_option__buttons){
-    table.add(b).width(questions[0].largest_width_of_option).height(questions[0].largest_height_of_option)
-        .pad(questions[0].padding_1);
-    table.row();
-}
+    for(TextraButton b:mybasketof_option__buttons){
+        table.add(b).width(questions[0].largest_width_of_option).height(questions[0].largest_height_of_option)
+            .pad(questions[0].padding_1);
+        table.row();
+    }
+    table.layout();
+
 
  Gdx.input.setInputProcessor(stage);
     stage.addActor(table);
 
     /// ends//
      a=1;
-    }
+    Image Cbackground = new Image(correctbackground);
+    int themuch=(worldheight/10) * (45/10);
+    Cbackground.setSize(worldwidth, themuch );
+    Cbackground.setPosition(0, 0);
+    Cbackground.setVisible(false);
+    stage.addActor(Cbackground);
+    Image Rbackground = new Image(wrongbackground);
+
+    Rbackground.setSize(worldwidth, themuch );
+    Rbackground.setPosition(0, 0);
+    Rbackground.setVisible(false);
+    stage.addActor(Rbackground);
+    ///    {{{{{{{{buttons here }}}}}}}}}}
+
+    stage.addActor(greenbutton);
+
+    greenbutton.setPosition(camera.viewportWidth-600,250);
+    greenbutton.setWidth(80);
+    greenbutton.setHeight(166);
+    greenbutton.setVisible(false);
+    greenbutton.setTouchable(Touchable.disabled);
+    stage.addActor(redbutton);
+
+    redbutton.setPosition(camera.viewportWidth-600,250);
+    redbutton.setWidth(80);
+    redbutton.setHeight(166);
+    redbutton.setVisible(false);
+    redbutton.setTouchable(Touchable.disabled);
+
+
+
+    //ACTION OF CLICKED//
+    if(do_it_hooraya){
+        System.out.println("insdie do it");
+       if(answer_3_or_5==5){
+           System.out.println("answer aws  CORRECT");
+           Cbackground.setVisible(true);
+           greenbutton.setVisible(do_it_hooraya);
+           greenbutton.setTouchable(Touchable.enabled);
+           Rbackground.setVisible(false);
+           redbutton.setVisible(false);
+           redbutton.setTouchable(Touchable.disabled);
+       } else if (answer_3_or_5==3) {
+           System.out.println("answer aws  WRONG");
+           Cbackground.setVisible(false);
+           greenbutton.setVisible(false);
+           greenbutton.setTouchable(Touchable.enabled);
+           Rbackground.setVisible(true);
+           redbutton.setVisible(true);
+           redbutton.setTouchable(Touchable.enabled);
+       }
+    }/*else if(!do_it_hooraya) {
+        Rbackground.setVisible(false);
+        redbutton.setVisible(false);
+        redbutton.setTouchable(Touchable.disabled);
+        Cbackground.setVisible(false);
+        greenbutton.setVisible(false);
+        greenbutton.setTouchable(Touchable.disabled);
+
+    }*/
+    OptionA_button.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            // Option A clicked
+            if(OptionA_button.getText().equals(questions[0].Answer)){
+                System.out.println("hoooooooorray");
+                do_it_hooraya=true;
+                answer_3_or_5=5;
+            }else{
+                do_it_hooraya=true;
+                answer_3_or_5=3;
+            }
+            if(answer_3_or_5==5){
+                System.out.println("answer aws  CORRECT");
+                Cbackground.setVisible(true);
+                greenbutton.setVisible(do_it_hooraya);
+                greenbutton.setTouchable(Touchable.enabled);
+                Rbackground.setVisible(false);
+                redbutton.setVisible(false);
+                redbutton.setTouchable(Touchable.disabled);
+            } else if (answer_3_or_5==3) {
+                System.out.println("answer aws  WRONG");
+                Cbackground.setVisible(false);
+                greenbutton.setVisible(false);
+                greenbutton.setTouchable(Touchable.enabled);
+                Rbackground.setVisible(true);
+                redbutton.setVisible(true);
+                redbutton.setTouchable(Touchable.enabled);
+            }
+        }
+    });
+
+    OptionB_button.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            // Option B clicked
+            if(OptionB_button.getText().equals(questions[0].Answer)){
+                System.out.println("hoooooooorray");
+                do_it_hooraya=true;
+                answer_3_or_5=5;
+            }else{
+                do_it_hooraya=true;
+                answer_3_or_5=3;
+            }
+            if(answer_3_or_5==5){
+                System.out.println("answer aws  CORRECT");
+                Cbackground.setVisible(true);
+                greenbutton.setVisible(do_it_hooraya);
+                greenbutton.setTouchable(Touchable.enabled);
+                Rbackground.setVisible(false);
+                redbutton.setVisible(false);
+                redbutton.setTouchable(Touchable.disabled);
+            } else if (answer_3_or_5==3) {
+                System.out.println("answer aws  WRONG");
+                Cbackground.setVisible(false);
+                greenbutton.setVisible(false);
+                greenbutton.setTouchable(Touchable.enabled);
+                Rbackground.setVisible(true);
+                redbutton.setVisible(true);
+                redbutton.setTouchable(Touchable.enabled);
+            }
+        }
+    });
+
+    OptionC_button.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            // Option C clicked
+            if(OptionC_button.getText().equals(questions[0].Answer)){
+                System.out.println("hoooooooorray");
+                do_it_hooraya=true;
+                answer_3_or_5=5;
+
+            }else{
+                do_it_hooraya=true;
+                answer_3_or_5=3;
+            }
+            if(answer_3_or_5==5){
+                System.out.println("answer aws  CORRECT");
+                Cbackground.setVisible(true);
+                greenbutton.setVisible(do_it_hooraya);
+                greenbutton.setTouchable(Touchable.enabled);
+                Rbackground.setVisible(false);
+                redbutton.setVisible(false);
+                redbutton.setTouchable(Touchable.disabled);
+            } else if (answer_3_or_5==3) {
+                System.out.println("answer aws  WRONG");
+                Cbackground.setVisible(false);
+                greenbutton.setVisible(false);
+                greenbutton.setTouchable(Touchable.enabled);
+                Rbackground.setVisible(true);
+                redbutton.setVisible(true);
+                redbutton.setTouchable(Touchable.enabled);
+            }
+        }
+    });
+
+    OptionD_button.addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            // Option D clicked
+            if(OptionD_button.getText().equals(questions[0].Answer)){
+                do_it_hooraya=true;
+                answer_3_or_5=5;
+            }else{
+                do_it_hooraya=true;
+                answer_3_or_5=3;
+                System.out.println("sorry  "+answer_3_or_5);
+            }
+            if(answer_3_or_5==5){
+                System.out.println("answer aws  CORRECT");
+                Cbackground.setVisible(true);
+                greenbutton.setVisible(do_it_hooraya);
+                greenbutton.setTouchable(Touchable.enabled);
+                Rbackground.setVisible(false);
+                redbutton.setVisible(false);
+                redbutton.setTouchable(Touchable.disabled);
+            } else if (answer_3_or_5==3) {
+                System.out.println("answer aws  WRONG");
+                Cbackground.setVisible(false);
+                greenbutton.setVisible(false);
+                greenbutton.setTouchable(Touchable.enabled);
+                Rbackground.setVisible(true);
+                redbutton.setVisible(true);
+                redbutton.setTouchable(Touchable.enabled);
+            }
+        }
+    });
+
+    greenbutton.addListener(new ClickListener(){
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            System.out.println("next question!!!");
+            greenbutton.setVisible(false);
+            Cbackground.setVisible(false);
+            greenbutton.setTouchable(Touchable.disabled);
+
+        }
+    });
+}
 
 
     @Override
